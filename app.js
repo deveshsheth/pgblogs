@@ -5,8 +5,23 @@ const db = require('./querys');
 const multer = require('multer');
 const path =require('path');
 const app = express();
-const port = 5000;
+// const port = 5000;
 const DIR ='./uploads';
+
+
+var distDir = __dirname + "/dist/";
+app.use(express.static(__dirname + '/public'));
+app.use(express.static(distDir));
+const port = process.env.PORT || 5000;
+
+express()
+  .use(express.static(path.join(__dirname, 'public')))
+  .set('views', path.join(__dirname, 'views'))
+  .set('view engine', 'ejs')
+  .get('/', (req, res) => res.render('pages/index'))
+  .get('/cool', (req, res) => res.send(cool()))
+
+
 let storage = multer.diskStorage({
     destination: (req,file, cb)=> {
         cb(null,DIR);
